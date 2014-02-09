@@ -14,6 +14,7 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -43,7 +44,7 @@ public class MusicListDetailActivity extends Activity {
         setContentView(R.layout.activity_music_list_detail);
         Intent intent = getIntent();
         String name = intent.getStringExtra(SONG_TITLE);
-        Song song = new MyMusicListService().findOne(name);
+        final Song song = new MyMusicListService().findOne(name);
         Log.d(TAG, "Song was passed in to new Activity: " + song.getName());
 
         TextView songName = (TextView) findViewById(R.id.textViewSongTitleText);
@@ -59,6 +60,15 @@ public class MusicListDetailActivity extends Activity {
         songDate.setText(df.format(song.getPublishedDate()));
 
         new RandomImageAsyncTask(this).execute(song.getName(),song.getAlbum(),song.getArtist());
+
+        final ImageView imageView = (ImageView)findViewById(R.id.imageViewSong);
+        imageView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                imageView.setImageResource(R.drawable.loading);
+                new RandomImageAsyncTask(MusicListDetailActivity.this).execute(song.getName(),song.getAlbum(),song.getArtist());
+            }
+        });
     }
 
     @Override
