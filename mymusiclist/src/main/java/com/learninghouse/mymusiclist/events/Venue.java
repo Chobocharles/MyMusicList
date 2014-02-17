@@ -8,21 +8,29 @@ import java.util.Map;
 
 public class Venue {
 
-    private String id;
+    private String city;
     private String name;
-    private Location location;
+    private String extended_address;
     private String url;
-    private String website;
-    private String phonenumber;
-    private List<Image> image = new ArrayList<Image>();
+    private String country;
+    private String display_location;
+    private List<Object> links = new ArrayList<Object>();
+    private String slug;
+    private String state;
+    private Integer score;
+    private String postal_code;
+    private Location location;
+    private String address;
+    private String timezone;
+    private Integer id;
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public String getId() {
-        return id;
+    public String getCity() {
+        return city;
     }
 
-    public void setId(String id) {
-        this.id = id;
+    public void setCity(String city) {
+        this.city = city;
     }
 
     public String getName() {
@@ -33,12 +41,12 @@ public class Venue {
         this.name = name;
     }
 
-    public Location getLocation() {
-        return location;
+    public String getExtended_address() {
+        return extended_address;
     }
 
-    public void setLocation(Location location) {
-        this.location = location;
+    public void setExtended_address(String extended_address) {
+        this.extended_address = extended_address;
     }
 
     public String getUrl() {
@@ -49,28 +57,92 @@ public class Venue {
         this.url = url;
     }
 
-    public String getWebsite() {
-        return website;
+    public String getCountry() {
+        return country;
     }
 
-    public void setWebsite(String website) {
-        this.website = website;
+    public void setCountry(String country) {
+        this.country = country;
     }
 
-    public String getPhonenumber() {
-        return phonenumber;
+    public String getDisplay_location() {
+        return display_location;
     }
 
-    public void setPhonenumber(String phonenumber) {
-        this.phonenumber = phonenumber;
+    public void setDisplay_location(String display_location) {
+        this.display_location = display_location;
     }
 
-    public List<Image> getImage() {
-        return image;
+    public List<Object> getLinks() {
+        return links;
     }
 
-    public void setImage(List<Image> image) {
-        this.image = image;
+    public void setLinks(List<Object> links) {
+        this.links = links;
+    }
+
+    public String getSlug() {
+        return slug;
+    }
+
+    public void setSlug(String slug) {
+        this.slug = slug;
+    }
+
+    public String getState() {
+        return state;
+    }
+
+    public void setState(String state) {
+        this.state = state;
+    }
+
+    public Integer getScore() {
+        return score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
+    public String getPostal_code() {
+        return postal_code;
+    }
+
+    public void setPostal_code(String postal_code) {
+        this.postal_code = postal_code;
+    }
+
+    public Location getLocation() {
+        return location;
+    }
+
+    public void setLocation(Location location) {
+        this.location = location;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
+    public String getTimezone() {
+        return timezone;
+    }
+
+    public void setTimezone(String timezone) {
+        this.timezone = timezone;
+    }
+
+    public Integer getId() {
+        return id;
+    }
+
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public Map<String, Object> getAdditionalProperties() {

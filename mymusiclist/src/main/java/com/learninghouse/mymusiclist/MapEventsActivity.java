@@ -20,19 +20,17 @@ import com.google.android.gms.maps.model.MarkerOptions;
 import com.google.gson.Gson;
 import com.learninghouse.mymusiclist.events.ArtistEvents;
 import com.learninghouse.mymusiclist.events.Event;
-import com.learninghouse.mymusiclist.events.Events;
 import com.learninghouse.mymusiclist.util.UrlFetchUtil;
 
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
+import java.util.List;
 
 public class MapEventsActivity extends FragmentActivity {
     private static final String DEBUG = "MAP";
-    private static final String LAST_FM_API_KEY =
-        "f4504ab89c3cde6e351892cd44679c57";
-    private static final String LAST_FM_DETAILS_BY_ARTIST_URL =
-        "http://ws.audioscrobbler.com/2.0/?method=artist.getevents&artist=%s&api_key=%s&format=json";
+    private static final String FIND_EVENTS_BY_ARTIST_URL =
+        "http://api.seatgeek.com/2/events?q=%s";
     private static final String SONG_TITLE = "SONG_TITLE";
     private SupportMapFragment mapFrag = null;
 
@@ -56,7 +54,7 @@ public class MapEventsActivity extends FragmentActivity {
             }
 
             new ListEventsAsyncTask(this).execute(
-                String.format(LAST_FM_DETAILS_BY_ARTIST_URL,encode_url, LAST_FM_API_KEY)
+                String.format(FIND_EVENTS_BY_ARTIST_URL,encode_url)
             );
         }
     }
@@ -87,38 +85,26 @@ public class MapEventsActivity extends FragmentActivity {
             Log.d(DEBUG,json);
 
             //ArtistEvents artistEvents =  new Gson().fromJson(json, ArtistEvents.class);
-
-            /*
-            ArtistEvents artistEvents = null;
+            ObjectMapper mapper = new ObjectMapper();
+            ArtistEvents events = null;
             try {
-                ObjectMapper mapper = new ObjectMapper();
-                artistEvents = mapper.readValue(json, ArtistEvents.class);
+                events = mapper.readValue(json, ArtistEvents.class);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-            */
-            return new ArtistEvents();
+            return events;
         }
 
         @Override
         protected void onPostExecute(ArtistEvents artistEvents) {
-            super.onPostExecute(artistEvents);
-
-            int count = 0;
-            try{
-               count = Integer.parseInt(artistEvents.getEvents().get_attr().getTotal());
-            }catch(Exception e){
-               //ignored... caught number format exception
-            }
-
-            if (count>0) {
+            if (artistEvents!=null && artistEvents.getEvents().size()>0) {
                 LatLngBounds.Builder builder = new LatLngBounds.Builder();
-                Events events =  artistEvents.getEvents();
+                List<Event> events =  artistEvents.getEvents();
 
-                for(Event event:events.getEvent()){
+                for(Event event:events){
                     LatLng latLng =  new LatLng(
-                        Double.parseDouble(event.getVenue().getLocation().getGeo_point().getGeo_lat()),
-                        Double.parseDouble(event.getVenue().getLocation().getGeo_point().getGeo_long())
+                        event.getVenue().getLocation().getLat(),
+                        event.getVenue().getLocation().getLon()
                     );
 
                     MarkerOptions marker = new MarkerOptions();
@@ -127,9 +113,10 @@ public class MapEventsActivity extends FragmentActivity {
                     builder.include(marker.getPosition());
                 }
 
-                int padding = 0; // offset from edges of the map in pixels
+                int padding = 20; // offset from edges of the map in pixels
                 LatLngBounds bounds = builder.build();
                 CameraUpdate cu = CameraUpdateFactory.newLatLngBounds(bounds, padding);
+                mapFrag.getMap().animateCamera(cu);
 
             } else {
                 Toast.makeText(

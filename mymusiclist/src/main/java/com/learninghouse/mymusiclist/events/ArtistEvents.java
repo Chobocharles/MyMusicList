@@ -1,19 +1,30 @@
 
 package com.learninghouse.mymusiclist.events;
 
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 public class ArtistEvents {
 
-    private Events events;
+    private Meta meta;
+    private List<Event> events = new ArrayList<Event>();
     private Map<String, Object> additionalProperties = new HashMap<String, Object>();
 
-    public Events getEvents() {
+    public Meta getMeta() {
+        return meta;
+    }
+
+    public void setMeta(Meta meta) {
+        this.meta = meta;
+    }
+
+    public List<Event> getEvents() {
         return events;
     }
 
-    public void setEvents(Events events) {
+    public void setEvents(List<Event> events) {
         this.events = events;
     }
 

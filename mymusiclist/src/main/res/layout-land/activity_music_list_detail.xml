@@ -112,14 +112,14 @@
                     android:layout_width="30pt"
                     android:padding="5dp"
                     />
-                <TextView
-                    android:id="@+id/textViewShowEvents"
-                    android:layout_width="fill_parent"
+                <Button android:id="@+id/textViewShowEvents"
+                    style="?android:attr/buttonStyleSmall"
+                    android:layout_alignParentRight="true"
+                    android:layout_gravity="center"
                     android:layout_height="wrap_content"
-                    android:text="Show Events"
-                    android:padding="5dp"
-                    />
-                    />
+                    android:layout_width="wrap_content"
+                    android:textSize="10dp"
+                    android:text="Show Events"/>
             </LinearLayout>
         </LinearLayout>
 
