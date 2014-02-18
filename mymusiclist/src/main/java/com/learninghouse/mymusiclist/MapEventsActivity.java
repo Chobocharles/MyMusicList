@@ -123,6 +123,7 @@ public class MapEventsActivity extends FragmentActivity {
                     context, "No Events found for Artist", Toast.LENGTH_LONG)
                     .show();
 
+                //some place in new york the author used.
                 LatLng latLng = new LatLng(40.734641, -73.996181);
 
                 float zoomlevel = 10.0f;
