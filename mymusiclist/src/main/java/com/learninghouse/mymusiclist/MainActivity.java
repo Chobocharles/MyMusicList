@@ -20,6 +20,11 @@ public class MainActivity extends ActionBarActivity {
         ActionBar actionBar = getSupportActionBar();
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
+        //sets a subtitle
+        actionBar.setSubtitle("Super kewl subtitle");
+        actionBar.show();
+
+
         ActionBar.Tab tab = null;
 
         //build list of songs
@@ -67,6 +72,7 @@ public class MainActivity extends ActionBarActivity {
         }
         return super.onOptionsItemSelected(item);
     }
+
 
     public Song getSong() {
         return song;
