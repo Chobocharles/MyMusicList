@@ -66,7 +66,7 @@ public class AddSongActivity extends ActionBarActivity {
             getActionBar().setDisplayHomeAsUpEnabled(true);
         }
         ActionBar actionBar = getSupportActionBar();
-        actionBar.setSubtitle("Super kewl subtitle");
+        actionBar.setSubtitle("Super Cool subtitle");
         actionBar.show();
     }
 

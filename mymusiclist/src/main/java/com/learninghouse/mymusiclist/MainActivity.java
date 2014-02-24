@@ -23,7 +23,7 @@ public class MainActivity extends ActionBarActivity {
         actionBar.setNavigationMode(ActionBar.NAVIGATION_MODE_TABS);
 
         //sets a subtitle
-        actionBar.setSubtitle("Super kewl subtitle");
+        actionBar.setSubtitle("Super Cool subtitle");
         actionBar.show();
 
         ActionBar.Tab tab = null;
