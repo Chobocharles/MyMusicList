@@ -25,16 +25,18 @@
             android:name="com.google.android.gms.version"
             android:value="@integer/google_play_services_version" />
 
-        <!--<activity
+        <!--
+        <activity
             android:name="com.learninghouse.mymusiclist.MusicListFragment"
             android:label="@string/app_name" >
-        </activity>-->
+        </activity>
+        -->
         <activity
-            android:name=".MusicListDetailFragment"
+            android:name="com.learninghouse.mymusiclist.MusicListDetailFragment"
             android:label="@string/title_activity_music_list_detail" >
         </activity>
         <activity
-            android:name=".MapEventsFragment"
+            android:name="com.learninghouse.mymusiclist.MapEventsFragment"
             android:label="@string/title_activity_map_events" >
         </activity>
         <activity
@@ -45,6 +47,11 @@
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+        </activity>
+        <activity
+            android:name=".AddSongActivity"
+            android:parentActivityName="com.learninghouse.mymusiclist.MainActivity"
+            android:label="@string/title_activity_add_music" >
         </activity>
     </application>
 

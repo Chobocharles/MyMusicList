@@ -1,10 +1,12 @@
 package com.learninghouse.mymusiclist;
 
+import android.content.Intent;
 import android.support.v7.app.ActionBarActivity;
 import android.support.v7.app.ActionBar;
 import android.os.Bundle;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
     private Song song = null;
@@ -23,7 +25,6 @@ public class MainActivity extends ActionBarActivity {
         //sets a subtitle
         actionBar.setSubtitle("Super kewl subtitle");
         actionBar.show();
-
 
         ActionBar.Tab tab = null;
 
@@ -55,7 +56,6 @@ public class MainActivity extends ActionBarActivity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.main, menu);
         return true;
@@ -66,11 +66,41 @@ public class MainActivity extends ActionBarActivity {
         // Handle action bar item clicks here. The action bar will
         // automatically handle clicks on the Home/Up button, so long
         // as you specify a parent activity in AndroidManifest.xml.
-        int id = item.getItemId();
-        if (id == R.id.action_settings) {
-            return true;
+        switch (item.getItemId()) {
+            case R.id.menuAdd:
+                addItem(item);
+                return true;
+            case R.id.menuRefresh:
+                refreshData(item);
+                return true;
+            case R.id.menuExit:
+                onExitClicked(item);
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
         }
-        return super.onOptionsItemSelected(item);
+    }
+
+    public void addItem(MenuItem menuItem){
+        Intent intent = new Intent(this, AddSongActivity.class);
+        startActivity(intent);
+
+        showToast("Adding new Song");
+    }
+
+    public boolean refreshData(MenuItem menuItem){
+        showToast("Refreshing Data");
+        return true;
+    }
+
+    public boolean onExitClicked(MenuItem menuItem){
+        finish();
+        return true;
+    }
+
+    private void showToast(String message) {
+        Toast t = Toast.makeText(this, message, Toast.LENGTH_SHORT);
+        t.show();
     }
 
 
