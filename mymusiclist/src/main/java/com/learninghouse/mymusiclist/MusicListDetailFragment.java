@@ -1,6 +1,5 @@
 package com.learninghouse.mymusiclist;
 
-import android.app.Activity;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -12,10 +11,10 @@ import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
 import android.util.Log;
-import android.view.Menu;
+import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -23,7 +22,6 @@ import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.learninghouse.mymusiclist.events.ArtistEvents;
 import com.learninghouse.mymusiclist.search.ImageResults;
 import com.learninghouse.mymusiclist.search.Result;
 import com.learninghouse.mymusiclist.util.Keys;
@@ -37,7 +35,9 @@ import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
-public class MusicListDetailActivity extends Activity {
+import android.support.v4.app.Fragment;
+
+public class MusicListDetailFragment extends Fragment {
     private static final String URL="https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=";
     private static final SimpleDateFormat df = new SimpleDateFormat("MMM d, yyyy (EEE)");
     private static final String SONG_TITLE = "SONG_TITLE";
@@ -46,83 +46,88 @@ public class MusicListDetailActivity extends Activity {
     private MediaPlayer mClickSound;
     private MediaPlayer mFailSound;
 
+    private String name=null;
+
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_music_list_detail);
-        Intent intent = getIntent();
-        String name = intent.getStringExtra(SONG_TITLE);
-        final Song song = new MyMusicListService().findOne(name);
-        Log.d(TAG, "Song was passed in to new Activity: " + song.getName());
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_music_list_detail, container, false);
+        return v;
+    }
 
-        TextView songName = (TextView) findViewById(R.id.textViewSongTitleText);
-        songName.setText(song.getName());
+    @Override
+    public void onStart() {
+        super.onStart();
 
-        TextView songArtist = (TextView) findViewById(R.id.textViewSongArtistText);
-        songArtist.setText(song.getArtist());
+        MainActivity activity =  (MainActivity)getActivity();
 
-        TextView songAlbum = (TextView) findViewById(R.id.textViewSongAlbumText);
-        songAlbum.setText(song.getAlbum());
+        if(activity.getSong()!=null){
+            final Song song = activity.getSong();
+            Log.d(TAG, "Song was passed in to new Activity: " + song.getName());
 
-        TextView songDate = (TextView) findViewById(R.id.textViewSongDateText);
-        songDate.setText(df.format(song.getPublishedDate()));
+            TextView songName = (TextView) getActivity().findViewById(R.id.textViewSongTitleText);
+            songName.setText(song.getName());
 
-        Button songEvents = (Button) findViewById(R.id.buttonShowEvents);
-        songEvents.setOnClickListener(new View.OnClickListener() {
+            TextView songArtist = (TextView) getActivity().findViewById(R.id.textViewSongArtistText);
+            songArtist.setText(song.getArtist());
 
-            @Override
-            public void onClick(View view) {
-                Intent intent = new Intent(view.getContext(), MapEventsActivity.class);
-                intent.putExtra(SONG_TITLE,  song.getArtist());
-                startActivity(intent);
-            }
-        });
+            TextView songAlbum = (TextView) getActivity().findViewById(R.id.textViewSongAlbumText);
+            songAlbum.setText(song.getAlbum());
 
-        Button playSong = (Button) findViewById(R.id.buttonPlayVideo);
+            TextView songDate = (TextView) getActivity().findViewById(R.id.textViewSongDateText);
+            songDate.setText(df.format(song.getPublishedDate()));
 
-        playSong.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                int startIndex = 0;
-                int startTimeMillis = 0;
-                boolean autoPlay = true;
-                boolean lightBoxMode = true;
+            Button songEvents = (Button) getActivity().findViewById(R.id.buttonShowEvents);
+            songEvents.setOnClickListener(new View.OnClickListener() {
 
-                Intent intent = YouTubeStandalonePlayer.createVideoIntent(
-                        (MusicListDetailActivity) view.getContext(),
+                @Override
+                public void onClick(View view) {
+                    //Intent intent = new Intent(view.getContext(), MapEventsFragment.class);
+                    //intent.putExtra(SONG_TITLE,  song.getArtist());
+                    //startActivity(intent);
+                    MainActivity activity =  (MainActivity)getActivity();
+                    activity.setSong(song);
+                    activity.getSupportActionBar().getTabAt(MainActivity.MAP_TAB).select();
+                }
+            });
+
+            Button playSong = (Button) getActivity().findViewById(R.id.buttonPlayVideo);
+
+            playSong.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    int startIndex = 0;
+                    int startTimeMillis = 0;
+                    boolean autoPlay = true;
+                    boolean lightBoxMode = true;
+
+                    Intent intent = YouTubeStandalonePlayer.createVideoIntent(
+                        getActivity(),
                         Keys.YOUTUBE_DEVELOPER_KEY,
                         song.getYouTubeVideoId(),
                         startTimeMillis,
                         autoPlay,
                         lightBoxMode);
-                Toast.makeText(view.getContext(), "Loading Youtube Idx: " + song.getYouTubeVideoId(), Toast.LENGTH_LONG).show();
-                view.getContext().startActivity(intent);
-            }
-        });
+                    Toast.makeText(view.getContext(), "Loading Youtube Idx: " + song.getYouTubeVideoId(), Toast.LENGTH_LONG).show();
+                    view.getContext().startActivity(intent);
+                }
+            });
 
-        new RandomImageAsyncTask(this).execute(song.getName(),song.getAlbum(),song.getArtist());
+            new RandomImageAsyncTask(getActivity()).execute(song.getName(),song.getAlbum(),song.getArtist());
 
-        mClickSound = MediaPlayer.create(this, R.raw.click);
+            mClickSound = MediaPlayer.create(getActivity(), R.raw.click);
 
-        final ImageView imageView = (ImageView)findViewById(R.id.imageViewSong);
-        imageView.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                imageView.setImageResource(R.drawable.loading);
-                mClickSound.start();
-                new RandomImageAsyncTask(MusicListDetailActivity.this)
-                        .execute(song.getName(), song.getAlbum(), song.getArtist());
-            }
-        });
+            final ImageView imageView = (ImageView)getActivity().findViewById(R.id.imageViewSong);
+            imageView.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    imageView.setImageResource(R.drawable.loading);
+                    mClickSound.start();
+                    new RandomImageAsyncTask(getActivity())
+                            .execute(song.getName(), song.getAlbum(), song.getArtist());
+                }
+            });
+        }
 
-
-    }
-
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        // Inflate the menu; this adds items to the action bar if it is present.
-        getMenuInflater().inflate(R.menu.music_list_detail, menu);
-        return true;
     }
 
     @Override
@@ -138,7 +143,7 @@ public class MusicListDetailActivity extends Activity {
     }
 
     @Override
-    protected void onDestroy() {
+    public void onDestroy() {
         super.onDestroy();
         if(mClickSound!=null){
             mClickSound.stop();
@@ -190,7 +195,7 @@ public class MusicListDetailActivity extends Activity {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            ImageView iv = (ImageView) findViewById(R.id.imageViewSong);
+            ImageView iv = (ImageView) getActivity().findViewById(R.id.imageViewSong);
             if(iv!=null && bitmap!=null){
                 iv.setImageBitmap(bitmap);
             }
@@ -227,6 +232,7 @@ public class MusicListDetailActivity extends Activity {
             return getRandomImageUrl(imageResults, count);
         }
         private Bitmap fetchImage(String strUrl){
+            //todo: thought we moved this.
             if(strUrl==null){
                 return null;
             }
@@ -262,7 +268,7 @@ public class MusicListDetailActivity extends Activity {
         }
 
         private void buildSimpleNotification(String msg, String name){
-            Intent refreshIntent = new Intent(context, MusicListDetailActivity.class);
+            Intent refreshIntent = new Intent(context, MusicListDetailFragment.class);
             refreshIntent.putExtra(SONG_TITLE, name);
             PendingIntent pendingIntent = PendingIntent.getActivity(context,0,refreshIntent,0);
 
@@ -276,9 +282,17 @@ public class MusicListDetailActivity extends Activity {
 
 
             NotificationManager notificationManager =
-                    (NotificationManager) getSystemService(NOTIFICATION_SERVICE);
+                    (NotificationManager) getActivity().getSystemService(Context.NOTIFICATION_SERVICE);
 
             notificationManager.notify(0, builder.build());
         }
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
     }
 }

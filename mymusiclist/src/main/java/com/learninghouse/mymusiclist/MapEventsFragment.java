@@ -3,9 +3,12 @@ package com.learninghouse.mymusiclist;
 import android.content.Context;
 import android.content.Intent;
 import android.os.AsyncTask;
-import android.support.v4.app.FragmentActivity;
+import android.support.v4.app.Fragment;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.LayoutInflater;
+import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Toast;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -26,23 +29,53 @@ import java.io.UnsupportedEncodingException;
 import java.net.URLEncoder;
 import java.util.List;
 
-public class MapEventsActivity extends FragmentActivity {
+public class MapEventsFragment extends Fragment {
     private static final String DEBUG = "MAP";
     private static final String FIND_EVENTS_BY_ARTIST_URL =
         "http://api.seatgeek.com/2/events?q=%s";
-    private static final String SONG_TITLE = "SONG_TITLE";
+    //private static final String SONG_TITLE = "SONG_TITLE";
     private SupportMapFragment mapFrag = null;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
+    //this is a work around for the map loading twice...
+    //need to be looked at to see if there is another option.
+    public void onCreate(Bundle savedInstanceState) {
+        setRetainInstance(true);
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_map_events);
+    }
 
-        Intent intent = getIntent();
-        String artistName = intent.getStringExtra(SONG_TITLE);
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            SupportMapFragment fragment = (SupportMapFragment) getActivity()
+                    .getSupportFragmentManager()
+                    .findFragmentById(R.id.event_map);
+            if (fragment != null) getFragmentManager().beginTransaction().remove(fragment).commit();
 
-        if(isMapAvailable()){
-            mapFrag = (SupportMapFragment) getSupportFragmentManager()
+        } catch (IllegalStateException e) {
+            //handle this situation because you are necessary will get
+            //an exception here :-(
+        }
+    }
+
+    @Override
+    public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
+        View v = inflater.inflate(R.layout.activity_map_events,container,false);
+        return v;
+    }
+
+    @Override
+    public void onStart() {
+        super.onStart();
+        //setContentView(R.layout.activity_map_events);
+
+        //Intent intent = getActivity().getIntent();
+        //String artistName = intent.getStringExtra(SONG_TITLE);
+        MainActivity activity =  (MainActivity)getActivity();
+        String artistName = activity.getSong().getArtist();
+
+        if(isMapAvailable() || (artistName!=null && artistName.length()>0)){
+            mapFrag = (SupportMapFragment) getActivity().getSupportFragmentManager()
                     .findFragmentById(R.id.event_map);
 
             String encode_url = "";
@@ -52,21 +85,21 @@ public class MapEventsActivity extends FragmentActivity {
                 e.printStackTrace();
             }
 
-            new ListEventsAsyncTask(this).execute(
+            new ListEventsAsyncTask(getActivity()).execute(
                 String.format(FIND_EVENTS_BY_ARTIST_URL,encode_url)
             );
         }
     }
 
     protected boolean isMapAvailable() {
-        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
+        int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(getActivity());
 
         if (status == ConnectionResult.SUCCESS) {
             return true;
         } else {
-            Toast.makeText(this, "Google Maps not Available, Please try again", Toast.LENGTH_LONG)
-                    .show();
-            finish();
+            Toast
+                .makeText(getActivity(), "Google Maps not Available, Please try again", Toast.LENGTH_LONG)
+                .show();
         }
 
         return false;
