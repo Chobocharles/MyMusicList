@@ -1,19 +1,14 @@
 package com.learninghouse.mymusiclist;
 
-import android.app.Activity;
-import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
-import android.support.v4.app.FragmentTransaction;
-import android.support.v7.app.ActionBarActivity;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.TabHost;
 
 import java.util.List;
 
@@ -60,10 +55,6 @@ public class MusicListFragment extends Fragment {
             MainActivity activity =  (MainActivity)getActivity();
             activity.setSong(o);
             activity.getSupportActionBar().getTabAt(MainActivity.EVENT_TAB).select();
-
-            //Intent intent = new Intent(view.getContext(), MusicListDetailFragment.class);
-            //intent.putExtra(SONG_TITLE,  o.getName());
-            //startActivity(intent);
             }
         });
     }

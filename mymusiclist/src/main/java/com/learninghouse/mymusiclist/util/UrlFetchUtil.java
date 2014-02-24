@@ -1,15 +1,22 @@
 package com.learninghouse.mymusiclist.util;
 
+import android.content.Context;
+import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.util.Log;
+
+import com.learninghouse.mymusiclist.R;
 
 import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
 public class UrlFetchUtil {
+    private static String TAG = "URL_FETCHER";
     private static int TIMEOUT=1000;
     public static String getJSON(String url){
         if (""==null || "".equalsIgnoreCase(url)){
@@ -48,5 +55,32 @@ public class UrlFetchUtil {
             Log.e("", ex.getMessage());
         }
         return "";
+    }
+
+    public static Bitmap fetchImage(String strUrl, Context context){
+        if(strUrl==null){
+            return null;
+        }
+
+        try {
+            URL url = new URL(strUrl);
+            HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
+            if(httpCon.getResponseCode()!=200){
+                throw new Exception("Failed to Connect");
+            }
+
+            InputStream is = httpCon.getInputStream();
+            return BitmapFactory.decodeStream(is);
+        } catch (MalformedURLException e) {
+            Log.e(TAG, "malformedurl: " + strUrl);
+            e.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        //return default image if nothing is loaded
+        return BitmapFactory.decodeResource(context.getResources(),
+                R.drawable.loading);
     }
 }

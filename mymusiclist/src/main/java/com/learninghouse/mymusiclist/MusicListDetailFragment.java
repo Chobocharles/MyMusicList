@@ -29,10 +29,6 @@ import com.learninghouse.mymusiclist.util.Keys;
 import com.learninghouse.mymusiclist.util.UrlFetchUtil;
 
 import java.io.IOException;
-import java.io.InputStream;
-import java.net.HttpURLConnection;
-import java.net.MalformedURLException;
-import java.net.URL;
 import java.text.SimpleDateFormat;
 import java.util.List;
 
@@ -171,7 +167,7 @@ public class MusicListDetailFragment extends Fragment {
             String image2get = getRandomImageUrl(imageResults,0);
 
             //return image
-            Bitmap bitmap = fetchImage(image2get);
+            Bitmap bitmap = UrlFetchUtil.fetchImage(image2get,context);
             if(bitmap!=null){
                 return bitmap;
             }else{
@@ -190,7 +186,6 @@ public class MusicListDetailFragment extends Fragment {
                 iv.setImageBitmap(bitmap);
             }
         }
-
 
         private String getRandomImageUrl(ImageResults imageResults, int count){
             if (imageResults==null){
@@ -221,33 +216,7 @@ public class MusicListDetailFragment extends Fragment {
 
             return getRandomImageUrl(imageResults, count);
         }
-        private Bitmap fetchImage(String strUrl){
-            //todo: thought we moved this.
-            if(strUrl==null){
-                return null;
-            }
 
-            try {
-                URL url = new URL(strUrl);
-                HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
-                if(httpCon.getResponseCode()!=200){
-                    throw new Exception("Failed to Connect");
-                }
-
-                InputStream is = httpCon.getInputStream();
-                return BitmapFactory.decodeStream(is);
-            } catch (MalformedURLException e) {
-                Log.e(TAG, "malformedurl: " + strUrl);
-                e.printStackTrace();
-            } catch (IOException e) {
-                e.printStackTrace();
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-            //return default image if nothing is loaded
-            return BitmapFactory.decodeResource(context.getResources(),
-                    R.drawable.loading);
-        }
         private String joinString(String... params){
             StringBuilder sb = new StringBuilder();
             for(String param:params){
