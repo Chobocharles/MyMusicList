@@ -237,7 +237,7 @@ public class MusicListDetailFragment extends Fragment {
                     .setTicker(msg)
                     .setSmallIcon(R.drawable.info)
                     .setAutoCancel(true)
-                    .addAction(R.drawable.refresh, "Reload", pendingIntent);
+                    .addAction(R.drawable.ic_menu_refresh, "Reload", pendingIntent);
 
 
             NotificationManager notificationManager =
