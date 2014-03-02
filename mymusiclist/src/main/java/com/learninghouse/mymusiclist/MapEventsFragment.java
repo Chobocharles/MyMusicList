@@ -53,28 +53,24 @@ public class MapEventsFragment extends Fragment {
             if (fragment != null) getFragmentManager().beginTransaction().remove(fragment).commit();
 
         } catch (IllegalStateException e) {
-            //handle this situation because you are necessary will get
+            //handle this situation because you may get
             //an exception here :-(
         }
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_map_events,container,false);
-        return v;
+        return inflater.inflate(R.layout.activity_map_events,container,false);
     }
 
     @Override
     public void onStart() {
         super.onStart();
-        //setContentView(R.layout.activity_map_events);
 
-        //Intent intent = getActivity().getIntent();
-        //String artistName = intent.getStringExtra(SONG_TITLE);
         MainActivity activity =  (MainActivity)getActivity();
         String artistName = activity.getSong().getArtist();
 
-        if(isMapAvailable() || (artistName!=null && artistName.length()>0)){
+        if(isMapAvailable() && (artistName!=null && artistName.length()>0)){
             mapFrag = (SupportMapFragment) getActivity().getSupportFragmentManager()
                     .findFragmentById(R.id.event_map);
 
@@ -100,9 +96,8 @@ public class MapEventsFragment extends Fragment {
             Toast
                 .makeText(getActivity(), "Google Maps not Available, Please try again", Toast.LENGTH_LONG)
                 .show();
+            return false;
         }
-
-        return false;
     }
 
     class ListEventsAsyncTask extends AsyncTask<String, Void, ArtistEvents> {

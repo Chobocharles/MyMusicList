@@ -39,17 +39,15 @@ public class AddSongActivity extends ActionBarActivity {
         EditText songArtistName = (EditText)findViewById(R.id.song_artist_name);
         EditText songYouTubeId = (EditText)findViewById(R.id.song_youtube_id);
 
-        //todo: implement a persistance mechanism
+        //persist
+        Song song = new Song();
+        song.setAlbum(songAlbum.getText().toString());
+        song.setArtist(songArtistName.getText().toString());
+        song.setName(songName.getText().toString());
+        song.setYouTubeVideoId(songName.getText().toString());
 
-        /*
-        ParseObject addSongObject = new ParseObject("Song");
-        addSongObject.put("songName", songName.getText().toString());
-        addSongObject.put("songAlbum", songAlbum.getText().toString());
-        addSongObject.put("songArtistName", songArtistName.getText().toString());
-        addSongObject.put("userName", "wesreisz");
-        addSongObject.put("songYouTubeId", songYouTubeId.getText().toString());
-        addSongObject.saveInBackground();
-        */
+        MyMusicListService service = MyMusicListService.getInstance();
+        service.saveSong(song);
 
         finish();
     }

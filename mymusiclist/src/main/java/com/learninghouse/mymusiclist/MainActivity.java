@@ -89,6 +89,7 @@ public class MainActivity extends ActionBarActivity {
     }
 
     public boolean refreshData(MenuItem menuItem){
+
         showToast("Refreshing Data");
         return true;
     }

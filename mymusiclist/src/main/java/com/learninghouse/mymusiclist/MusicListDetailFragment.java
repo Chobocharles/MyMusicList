@@ -47,8 +47,7 @@ public class MusicListDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_music_list_detail, container, false);
-        return v;
+        return inflater.inflate(R.layout.activity_music_list_detail, container, false);
     }
 
     @Override
@@ -78,9 +77,6 @@ public class MusicListDetailFragment extends Fragment {
 
                 @Override
                 public void onClick(View view) {
-                    //Intent intent = new Intent(view.getContext(), MapEventsFragment.class);
-                    //intent.putExtra(SONG_TITLE,  song.getArtist());
-                    //startActivity(intent);
                     MainActivity activity =  (MainActivity)getActivity();
                     activity.setSong(song);
                     activity.getSupportActionBar().getTabAt(MainActivity.MAP_TAB).select();

@@ -32,7 +32,7 @@ public class MusicListFragment extends Fragment {
         mSound = MediaPlayer.create(getActivity(), R.raw.click);
 
         ListView listView = (ListView)getActivity().findViewById(R.id.listViewSongs);
-        List<Song> songs = new MyMusicListService().findAll();
+        List<Song> songs = MyMusicListService.getInstance().findAll();
 
         //default the first song into the activity
         MainActivity activity =  (MainActivity)getActivity();
