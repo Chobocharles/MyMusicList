@@ -18,21 +18,16 @@ public class MusicListFragment extends Fragment {
     private static final String TAG = "MusicList";
 
     private MediaPlayer mSound;
+    List<Song> songs;
+    View view;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View v = inflater.inflate(R.layout.activity_music_list_main,container, false);
-        return v;
-    }
+        view = inflater.inflate(R.layout.activity_music_list_main,container,false);
 
-    @Override
-    public void onStart() {
-        super.onStart();
+        songs = MyMusicListService.getInstance(getActivity()).findAll();
 
         mSound = MediaPlayer.create(getActivity(), R.raw.click);
-
-        ListView listView = (ListView)getActivity().findViewById(R.id.listViewSongs);
-        List<Song> songs = MyMusicListService.getInstance().findAll();
 
         //default the first song into the activity
         MainActivity activity =  (MainActivity)getActivity();
@@ -41,22 +36,31 @@ public class MusicListFragment extends Fragment {
             break;
         }
 
-        final SongAdapter adapter =
+        SongAdapter adapter =
                 new SongAdapter(getActivity(), R.layout.listview_for_each_song, songs);
+        ListView listView = (ListView)view.findViewById(R.id.listViewSongs);
         listView.setAdapter(adapter);
 
         listView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
             public void onItemClick(AdapterView<?> adapterView, View view, int position, long l) {
-            mSound.start();
-            Song o = (Song) adapter.getItem(position);
-            Log.i(TAG, "You selected: " + o.getName());
+                mSound.start();
+                Song o = (Song) songs.get(position);
+                Log.i(TAG, "You selected: " + o.getName());
 
-            MainActivity activity =  (MainActivity)getActivity();
-            activity.setSong(o);
-            activity.getSupportActionBar().getTabAt(MainActivity.EVENT_TAB).select();
+                MainActivity activity =  (MainActivity)getActivity();
+                activity.setSong(o);
+                activity.getSupportActionBar().getTabAt(MainActivity.EVENT_TAB).select();
             }
         });
+
+        return view;
+    }
+
+    @Override
+    public void onPause() {
+        super.onPause();
+        MyMusicListService.getInstance(getActivity()).saveSongs();
     }
 
     @Override
