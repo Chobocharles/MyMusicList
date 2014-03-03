@@ -44,21 +44,6 @@ public class MapEventsFragment extends Fragment {
     }
 
     @Override
-    public void onDestroyView() {
-        super.onDestroyView();
-        try {
-            SupportMapFragment fragment = (SupportMapFragment) getActivity()
-                    .getSupportFragmentManager()
-                    .findFragmentById(R.id.event_map);
-            if (fragment != null) getFragmentManager().beginTransaction().remove(fragment).commit();
-
-        } catch (IllegalStateException e) {
-            //handle this situation because you may get
-            //an exception here :-(
-        }
-    }
-
-    @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         return inflater.inflate(R.layout.activity_map_events,container,false);
     }
@@ -82,8 +67,23 @@ public class MapEventsFragment extends Fragment {
             }
 
             new ListEventsAsyncTask(getActivity()).execute(
-                String.format(FIND_EVENTS_BY_ARTIST_URL,encode_url)
+                    String.format(FIND_EVENTS_BY_ARTIST_URL,encode_url)
             );
+        }
+    }
+
+    @Override
+    public void onDestroyView() {
+        super.onDestroyView();
+        try {
+            SupportMapFragment fragment = (SupportMapFragment) getActivity()
+                    .getSupportFragmentManager()
+                    .findFragmentById(R.id.event_map);
+            if (fragment != null) getFragmentManager().beginTransaction().remove(fragment).commit();
+
+        } catch (IllegalStateException e) {
+            //handle this situation because you may get
+            //an exception here :-(
         }
     }
 
