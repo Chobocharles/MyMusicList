@@ -47,12 +47,7 @@ public class MusicListDetailFragment extends Fragment {
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        return inflater.inflate(R.layout.activity_music_list_detail, container, false);
-    }
-
-    @Override
-    public void onStart() {
-        super.onStart();
+        View view =  inflater.inflate(R.layout.activity_music_list_detail, container, false);
 
         MainActivity activity =  (MainActivity)getActivity();
 
@@ -60,19 +55,19 @@ public class MusicListDetailFragment extends Fragment {
             final Song song = activity.getSong();
             Log.d(TAG, "Song was passed in to new Activity: " + song.getName());
 
-            TextView songName = (TextView) getActivity().findViewById(R.id.textViewSongTitleText);
+            TextView songName = (TextView) view.findViewById(R.id.textViewSongTitleText);
             songName.setText(song.getName());
 
-            TextView songArtist = (TextView) getActivity().findViewById(R.id.textViewSongArtistText);
+            TextView songArtist = (TextView) view.findViewById(R.id.textViewSongArtistText);
             songArtist.setText(song.getArtist());
 
-            TextView songAlbum = (TextView) getActivity().findViewById(R.id.textViewSongAlbumText);
+            TextView songAlbum = (TextView) view.findViewById(R.id.textViewSongAlbumText);
             songAlbum.setText(song.getAlbum());
 
-            TextView songDate = (TextView) getActivity().findViewById(R.id.textViewSongDateText);
+            TextView songDate = (TextView) view.findViewById(R.id.textViewSongDateText);
             songDate.setText(df.format(song.getPublishedDate()));
 
-            Button songEvents = (Button) getActivity().findViewById(R.id.buttonShowEvents);
+            Button songEvents = (Button) view.findViewById(R.id.buttonShowEvents);
             songEvents.setOnClickListener(new View.OnClickListener() {
 
                 @Override
@@ -83,7 +78,7 @@ public class MusicListDetailFragment extends Fragment {
                 }
             });
 
-            Button playSong = (Button) getActivity().findViewById(R.id.buttonPlayVideo);
+            Button playSong = (Button) view.findViewById(R.id.buttonPlayVideo);
 
             playSong.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -94,13 +89,13 @@ public class MusicListDetailFragment extends Fragment {
                     boolean lightBoxMode = true;
 
                     Intent intent = YouTubeStandalonePlayer.createVideoIntent(
-                        getActivity(),
-                        Keys.YOUTUBE_DEVELOPER_KEY,
-                        song.getYouTubeVideoId(),
-                        startTimeMillis,
-                        autoPlay,
-                        lightBoxMode);
-                    Toast.makeText(view.getContext(), "Loading Youtube Idx: " + song.getYouTubeVideoId(), Toast.LENGTH_LONG).show();
+                            getActivity(),
+                            Keys.YOUTUBE_DEVELOPER_KEY,
+                            song.getYouTubeVideoId(),
+                            startTimeMillis,
+                            autoPlay,
+                            lightBoxMode);
+                    Toast.makeText(view.getContext(), "Loading Youtube Id: " + song.getYouTubeVideoId(), Toast.LENGTH_LONG).show();
                     view.getContext().startActivity(intent);
                 }
             });
@@ -109,7 +104,7 @@ public class MusicListDetailFragment extends Fragment {
 
             mClickSound = MediaPlayer.create(getActivity(), R.raw.click);
 
-            final ImageView imageView = (ImageView)getActivity().findViewById(R.id.imageViewSong);
+            final ImageView imageView = (ImageView)view.findViewById(R.id.imageViewSong);
             imageView.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
@@ -121,8 +116,14 @@ public class MusicListDetailFragment extends Fragment {
             });
         }
 
+        return view;
     }
 
+    @Override
+    public void onStart() {
+        super.onStart();
+
+    }
 
     @Override
     public void onDestroy() {

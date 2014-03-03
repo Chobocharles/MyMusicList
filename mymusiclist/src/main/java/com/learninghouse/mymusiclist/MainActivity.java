@@ -10,6 +10,7 @@ import android.widget.Toast;
 
 public class MainActivity extends ActionBarActivity {
     private Song song = null;
+
     public static final int LIST_TAB = 0;
     public static final int EVENT_TAB = 1;
     public static final int MAP_TAB = 2;
@@ -28,6 +29,8 @@ public class MainActivity extends ActionBarActivity {
 
         ActionBar.Tab tab = null;
 
+
+
         //build list of songs
         tab = actionBar.newTab();
         tab.setText("Song List");
@@ -40,7 +43,7 @@ public class MainActivity extends ActionBarActivity {
         tab = actionBar.newTab();
         tab.setText("Details");
         tab.setTabListener(
-                new SimpleTabListener(this, "com.learninghouse.mymusiclist.MusicListDetailFragment")
+              new SimpleTabListener(this, "com.learninghouse.mymusiclist.MusicListDetailFragment")
         );
         actionBar.addTab(tab);
 
@@ -48,7 +51,7 @@ public class MainActivity extends ActionBarActivity {
         tab = actionBar.newTab();
         tab.setText("Events");
         tab.setTabListener(
-                new SimpleTabListener(this, "com.learninghouse.mymusiclist.MapEventsFragment")
+              new SimpleTabListener(this, "com.learninghouse.mymusiclist.MapEventsFragment")
         );
         actionBar.addTab(tab);
     }

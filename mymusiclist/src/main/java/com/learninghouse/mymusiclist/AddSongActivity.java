@@ -44,10 +44,10 @@ public class AddSongActivity extends ActionBarActivity {
         song.setAlbum(songAlbum.getText().toString());
         song.setArtist(songArtistName.getText().toString());
         song.setName(songName.getText().toString());
-        song.setYouTubeVideoId(songName.getText().toString());
+        song.setYouTubeVideoId(songYouTubeId.getText().toString());
 
-        MyMusicListService service = MyMusicListService.getInstance();
-        service.saveSong(song);
+        MyMusicListService service = MyMusicListService.getInstance(this);
+        service.addSong(song);
 
         finish();
     }
