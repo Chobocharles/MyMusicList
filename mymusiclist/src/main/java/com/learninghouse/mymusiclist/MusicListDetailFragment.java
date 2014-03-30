@@ -178,9 +178,11 @@ public class MusicListDetailFragment extends Fragment {
 
         @Override
         protected void onPostExecute(Bitmap bitmap) {
-            ImageView iv = (ImageView) getActivity().findViewById(R.id.imageViewSong);
-            if(iv!=null && bitmap!=null){
-                iv.setImageBitmap(bitmap);
+            if(getActivity()!=null) {
+                ImageView iv = (ImageView) getActivity().findViewById(R.id.imageViewSong);
+                if (iv != null && bitmap != null) {
+                    iv.setImageBitmap(bitmap);
+                }
             }
         }
 
