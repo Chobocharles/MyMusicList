@@ -19,9 +19,9 @@ public class SimpleTabListener implements ActionBar.TabListener {
 
     @Override
     public void onTabSelected(ActionBar.Tab tab, FragmentTransaction ft) {
-        if (mTabFragment==null){
+       if (mTabFragment==null){
             mTabFragment = Fragment.instantiate(mContext, mTabFragmentClassName);
-            ft.add(R.id.content, mTabFragment); //R.id.content is a constant for the current content
+            ft.replace(R.id.content, mTabFragment); //R.id.content is a constant for the current content
         }else{
             ft.attach(mTabFragment);
         }
