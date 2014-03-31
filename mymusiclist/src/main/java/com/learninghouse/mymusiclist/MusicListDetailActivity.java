@@ -8,6 +8,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
+import android.media.MediaPlayer;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.app.NotificationCompat;
@@ -38,6 +39,9 @@ public class MusicListDetailActivity extends Activity {
     private static final String SONG_TITLE = "SONG_TITLE";
     private static final String TAG = "MusicList";
 
+    private MediaPlayer mClickSound;
+    private MediaPlayer mFailSound;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -61,12 +65,16 @@ public class MusicListDetailActivity extends Activity {
 
         new RandomImageAsyncTask(this).execute(song.getName(),song.getAlbum(),song.getArtist());
 
+        mClickSound = MediaPlayer.create(this, R.raw.click);
+
         final ImageView imageView = (ImageView)findViewById(R.id.imageViewSong);
         imageView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 imageView.setImageResource(R.drawable.loading);
-                new RandomImageAsyncTask(MusicListDetailActivity.this).execute(song.getName(),song.getAlbum(),song.getArtist());
+                mClickSound.start();
+                new RandomImageAsyncTask(MusicListDetailActivity.this)
+                        .execute(song.getName(),song.getAlbum(),song.getArtist());
             }
         });
     }
@@ -91,6 +99,21 @@ public class MusicListDetailActivity extends Activity {
         return super.onOptionsItemSelected(item);
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        if(mClickSound!=null){
+            mClickSound.stop();
+            mClickSound.release();
+            mClickSound = null;
+        }
+        if(mFailSound!=null){
+            mFailSound.stop();
+            mFailSound.release();
+            mFailSound = null;
+        }
+    }
+
     class RandomImageAsyncTask extends AsyncTask<String, Integer, Bitmap> {
         private Context context;
         public RandomImageAsyncTask(Context context){
@@ -112,6 +135,8 @@ public class MusicListDetailActivity extends Activity {
             if(bitmap!=null){
                 return bitmap;
             }else{
+                mFailSound =  MediaPlayer.create(context, R.raw.wrong);
+                mFailSound.start();
                 buildSimpleNotification("Failed to load image",params[0]);
                 return BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.loading);
