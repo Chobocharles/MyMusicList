@@ -1,6 +1,7 @@
 package com.learninghouse.mymusiclist;
 
 import android.app.Activity;
+import android.content.Context;
 import android.content.Intent;
 import android.graphics.Bitmap;
 import android.graphics.BitmapFactory;
@@ -53,7 +54,7 @@ public class MusicListDetailActivity extends Activity {
         TextView songDate = (TextView) findViewById(R.id.textViewSongDateText);
         songDate.setText(df.format(song.getPublishedDate()));
 
-        new RandomImageAsyncTask().execute(song.getName(),song.getAlbum(),song.getArtist());
+        new RandomImageAsyncTask(this).execute(song.getName(),song.getAlbum(),song.getArtist());
     }
 
     @Override
@@ -77,6 +78,10 @@ public class MusicListDetailActivity extends Activity {
     }
 
     class RandomImageAsyncTask extends AsyncTask<String, Integer, Bitmap> {
+        private Context context;
+        public RandomImageAsyncTask(Context context){
+            this.context=context;
+        }
         @Override
         protected Bitmap doInBackground(String... params) {
             String json = getJSON(URL + joinString(params),1000);
@@ -101,9 +106,10 @@ public class MusicListDetailActivity extends Activity {
         }
 
         private String getJSON(String url, int timeout) {
+            HttpURLConnection c = null;
             try {
                 java.net.URL u = new URL(url);
-                HttpURLConnection c = (HttpURLConnection) u.openConnection();
+                c = (HttpURLConnection) u.openConnection();
                 c.setRequestMethod("GET");
                 c.setRequestProperty("Content-length", "0");
                 c.setUseCaches(false);
@@ -126,13 +132,12 @@ public class MusicListDetailActivity extends Activity {
                         br.close();
                         return sb.toString();
                 }
-
             } catch (MalformedURLException ex) {
                 Log.e("", ex.getMessage());
             } catch (IOException ex) {
                 Log.e("", ex.getMessage());
             }
-            return null;
+            return "";
         }
         private String getRandomImageUrl(ImageResults imageResults, int count){
             int lCount = count;
@@ -160,6 +165,12 @@ public class MusicListDetailActivity extends Activity {
             return getRandomImageUrl(imageResults, count);
         }
         private Bitmap fetchImage(String strUrl){
+            if(strUrl==null){
+                //return default image if nothing is loaded
+                return BitmapFactory.decodeResource(context.getResources(),
+                        R.drawable.loading);
+            }
+
             try {
                 URL url = new URL(strUrl);
                 HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
@@ -177,7 +188,9 @@ public class MusicListDetailActivity extends Activity {
             } catch (Exception e) {
                 e.printStackTrace();
             }
-            return null;
+            //return default image if nothing is loaded
+            return BitmapFactory.decodeResource(context.getResources(),
+                    R.drawable.loading);
         }
         private String joinString(String... params){
             StringBuilder sb = new StringBuilder();
