@@ -101,7 +101,7 @@
             android:layout_width="30pt"
             android:padding="5dp"
             />
-        <Button android:id="@+id/textViewShowEvents"
+        <Button android:id="@+id/buttonShowEvents"
             style="?android:attr/buttonStyleSmall"
             android:layout_alignParentRight="true"
             android:layout_gravity="center"
@@ -109,6 +109,14 @@
             android:layout_width="wrap_content"
             android:textSize="10dp"
             android:text="Show Events"/>
+        <Button android:id="@+id/buttonPlayVideo"
+            style="?android:attr/buttonStyleSmall"
+            android:layout_alignParentRight="true"
+            android:layout_gravity="center"
+            android:layout_height="wrap_content"
+            android:layout_width="wrap_content"
+            android:textSize="10dp"
+            android:text="Play Video"/>
 
     </LinearLayout>
 

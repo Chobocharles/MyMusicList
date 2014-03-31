@@ -16,12 +16,16 @@ import android.view.Menu;
 import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import com.google.android.youtube.player.YouTubeStandalonePlayer;
 import com.google.gson.Gson;
 import com.learninghouse.mymusiclist.search.ImageResults;
 import com.learninghouse.mymusiclist.search.Result;
+import com.learninghouse.mymusiclist.util.Keys;
 import com.learninghouse.mymusiclist.util.UrlFetchUtil;
 
 import java.io.IOException;
@@ -62,7 +66,7 @@ public class MusicListDetailActivity extends Activity {
         TextView songDate = (TextView) findViewById(R.id.textViewSongDateText);
         songDate.setText(df.format(song.getPublishedDate()));
 
-        TextView songEvents = (TextView) findViewById(R.id.textViewShowEvents);
+        Button songEvents = (Button) findViewById(R.id.buttonShowEvents);
         songEvents.setOnClickListener(new View.OnClickListener() {
 
             @Override
@@ -73,6 +77,27 @@ public class MusicListDetailActivity extends Activity {
             }
         });
 
+        Button playSong = (Button) findViewById(R.id.buttonPlayVideo);
+
+        playSong.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                int startIndex = 0;
+                int startTimeMillis = 0;
+                boolean autoPlay = true;
+                boolean lightBoxMode = true;
+
+                Intent intent = YouTubeStandalonePlayer.createVideoIntent(
+                        (MusicListDetailActivity) view.getContext(),
+                        Keys.YOUTUBE_DEVELOPER_KEY,
+                        song.getYouTubeVideoId(),
+                        startTimeMillis,
+                        autoPlay,
+                        lightBoxMode);
+                Toast.makeText(view.getContext(), "Loading Youtube Idx: " + song.getYouTubeVideoId(), Toast.LENGTH_LONG).show();
+                view.getContext().startActivity(intent);
+            }
+        });
 
         new RandomImageAsyncTask(this).execute(song.getName(),song.getAlbum(),song.getArtist());
 
@@ -88,6 +113,8 @@ public class MusicListDetailActivity extends Activity {
                         .execute(song.getName(), song.getAlbum(), song.getArtist());
             }
         });
+
+
     }
 
     @Override

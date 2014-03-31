@@ -25,4 +25,6 @@ dependencies {
     compile 'com.google.android.gms:play-services:4.0.+'
     compile 'com.fasterxml.jackson.core:jackson-databind:2.1.+'
     compile 'com.fasterxml.jackson.core:jackson-core:2.1.+'
+    compile files('libs/YouTubeAndroidPlayerApi.jar')
+    //what is the correct way to include a local jar to gradle???
 }

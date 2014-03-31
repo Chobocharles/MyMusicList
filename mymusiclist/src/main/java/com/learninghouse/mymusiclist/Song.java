@@ -8,18 +8,18 @@ public class Song {
     private String album;
     private Date publishedDate;
 
+    private String youTubeVideoId;
+
     public Song(){
-        name="";
-        artist="";
-        album="";
         publishedDate=new Date();
     }
 
-    public Song(String name, String artist, String album, Date publishedDate) {
+    public Song(String name, String artist, String album, Date publishedDate, String youTubeId) {
         this.name = name;
         this.artist = artist;
         this.album = album;
         this.publishedDate = publishedDate;
+        this.youTubeVideoId = youTubeId;
     }
 
     public String getName() {
@@ -52,5 +52,13 @@ public class Song {
 
     public void setPublishedDate(Date publishedDate) {
         this.publishedDate = publishedDate;
+    }
+
+    public String getYouTubeVideoId() {
+        return youTubeVideoId;
+    }
+
+    public void setYouTubeVideoId(String youTubeVideoId) {
+        this.youTubeVideoId = youTubeVideoId;
     }
 }
