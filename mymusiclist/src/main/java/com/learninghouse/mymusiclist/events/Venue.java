@@ -1,11 +1,14 @@
 
 package com.learninghouse.mymusiclist.events;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Venue {
 
     private String city;

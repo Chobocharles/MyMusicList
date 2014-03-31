@@ -1,12 +1,10 @@
 package com.learninghouse.mymusiclist.search;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Page {
-
-    @Expose
     private String start;
-    @Expose
     private Integer label;
 
     public String getStart() {

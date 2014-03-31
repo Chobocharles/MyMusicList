@@ -21,8 +21,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.android.youtube.player.YouTubeStandalonePlayer;
-import com.google.gson.Gson;
+import com.learninghouse.mymusiclist.events.ArtistEvents;
 import com.learninghouse.mymusiclist.search.ImageResults;
 import com.learninghouse.mymusiclist.search.Result;
 import com.learninghouse.mymusiclist.util.Keys;
@@ -119,7 +120,6 @@ public class MusicListDetailActivity extends Activity {
 
     @Override
     public boolean onCreateOptionsMenu(Menu menu) {
-        
         // Inflate the menu; this adds items to the action bar if it is present.
         getMenuInflater().inflate(R.menu.music_list_detail, menu);
         return true;
@@ -163,8 +163,14 @@ public class MusicListDetailActivity extends Activity {
             String json = UrlFetchUtil.getJSON(URL + joinString(params));
             Log.d("",json);
 
-            //search google for images
-            ImageResults imageResults = new Gson().fromJson(json, ImageResults.class);
+            //search google for images, gson approach
+            ObjectMapper mapper = new ObjectMapper();
+            ImageResults imageResults = null;
+            try {
+                imageResults = mapper.readValue(json, ImageResults.class);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             //attempt at least three times to get an image
             String image2get = getRandomImageUrl(imageResults,0);

@@ -17,7 +17,6 @@ import com.google.android.gms.maps.SupportMapFragment;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.LatLngBounds;
 import com.google.android.gms.maps.model.MarkerOptions;
-import com.google.gson.Gson;
 import com.learninghouse.mymusiclist.events.ArtistEvents;
 import com.learninghouse.mymusiclist.events.Event;
 import com.learninghouse.mymusiclist.util.UrlFetchUtil;
@@ -42,7 +41,7 @@ public class MapEventsActivity extends FragmentActivity {
         Intent intent = getIntent();
         String artistName = intent.getStringExtra(SONG_TITLE);
 
-        if(mapIsAvailable()){
+        if(isMapAvailable()){
             mapFrag = (SupportMapFragment) getSupportFragmentManager()
                     .findFragmentById(R.id.event_map);
 
@@ -59,18 +58,18 @@ public class MapEventsActivity extends FragmentActivity {
         }
     }
 
-    protected boolean mapIsAvailable() {
+    protected boolean isMapAvailable() {
         int status = GooglePlayServicesUtil.isGooglePlayServicesAvailable(this);
 
         if (status == ConnectionResult.SUCCESS) {
-            return (true);
+            return true;
         } else {
             Toast.makeText(this, "Google Maps not Available, Please try again", Toast.LENGTH_LONG)
                     .show();
             finish();
         }
 
-        return (false);
+        return false;
     }
 
     class ListEventsAsyncTask extends AsyncTask<String, Void, ArtistEvents> {
@@ -84,7 +83,6 @@ public class MapEventsActivity extends FragmentActivity {
             String json = UrlFetchUtil.getJSON(url[0]);
             Log.d(DEBUG,json);
 
-            //ArtistEvents artistEvents =  new Gson().fromJson(json, ArtistEvents.class);
             ObjectMapper mapper = new ObjectMapper();
             ArtistEvents events = null;
             try {

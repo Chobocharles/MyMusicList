@@ -9,9 +9,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 
-/**
- * Created by wesleyreisz on 2/16/14.
- */
 public class UrlFetchUtil {
     private static int TIMEOUT=1000;
     public static String getJSON(String url){

@@ -1,9 +1,12 @@
 
 package com.learninghouse.mymusiclist.events;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
 import java.util.HashMap;
 import java.util.Map;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class Stats {
 
     private Integer listing_count;

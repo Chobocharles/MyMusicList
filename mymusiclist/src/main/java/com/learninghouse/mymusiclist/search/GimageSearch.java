@@ -1,8 +1,8 @@
 package com.learninghouse.mymusiclist.search;
 
-/**
- * Created by wesleyreisz on 1/26/14.
- */
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class GimageSearch {
     private String GsearchResultClass;
     private int width;

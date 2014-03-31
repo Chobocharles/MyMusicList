@@ -2,13 +2,12 @@ package com.learninghouse.mymusiclist.search;
 
 import java.util.ArrayList;
 import java.util.List;
-import com.google.gson.annotations.Expose;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ResponseData {
-
-    @Expose
     private List<Result> results = new ArrayList<Result>();
-    @Expose
     private Cursor cursor;
 
     public List<Result> getResults() {

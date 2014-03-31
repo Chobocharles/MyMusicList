@@ -1,14 +1,11 @@
 package com.learninghouse.mymusiclist.search;
 
-import com.google.gson.annotations.Expose;
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 
+@JsonIgnoreProperties(ignoreUnknown = true)
 public class ImageResults {
-
-    @Expose
     private ResponseData responseData;
-    @Expose
     private Object responseDetails;
-    @Expose
     private Integer responseStatus;
 
     public ResponseData getResponseData() {
