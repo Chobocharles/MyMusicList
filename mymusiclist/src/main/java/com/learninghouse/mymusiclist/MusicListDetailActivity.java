@@ -24,6 +24,7 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.text.SimpleDateFormat;
+import java.util.List;
 
 public class MusicListDetailActivity extends Activity {
     private static final String URL="https://ajax.googleapis.com/ajax/services/search/images?v=1.0&q=";
@@ -81,9 +82,14 @@ public class MusicListDetailActivity extends Activity {
             String json = getJSON(URL + joinString(params),1000);
             Log.d("",json);
 
+            //search google for images
             ImageResults imageResults = new Gson().fromJson(json, ImageResults.class);
-            String image2get = getFirstImage(imageResults);
-            return getImage(image2get);
+
+            //attempt at least three times to get an image
+            String image2get = getRandomImageUrl(imageResults,0);
+
+            //return image
+            return fetchImage(image2get);
         }
 
         @Override
@@ -128,16 +134,32 @@ public class MusicListDetailActivity extends Activity {
             }
             return null;
         }
-        private String getFirstImage(ImageResults imageResults){
-            for(Result result : imageResults.getResponseData().getResults()){
+        private String getRandomImageUrl(ImageResults imageResults, int count){
+            int lCount = count;
+
+            if (lCount>3){
+                Log.e(TAG,"Unable to retrieve an image on three attempts");
+                return null;
+            }
+            List<Result> results = imageResults.getResponseData().getResults();
+
+            int randomNumber = ( int )( Math.random() * results.size());
+
+            for(int i = randomNumber; i<results.size(); i++){
+                Result result = results.get(i);
+
                 if (Integer.parseInt(result.getHeight())<=600 &&
                     Integer.parseInt(result.getWidth())<=800){
                     return result.getUnescapedUrl();
                 }
+                else{
+                    i++;
+                }
             }
-            return null;
+
+            return getRandomImageUrl(imageResults, count);
         }
-        private Bitmap getImage(String strUrl){
+        private Bitmap fetchImage(String strUrl){
             try {
                 URL url = new URL(strUrl);
                 HttpURLConnection httpCon = (HttpURLConnection) url.openConnection();
@@ -148,6 +170,7 @@ public class MusicListDetailActivity extends Activity {
                 InputStream is = httpCon.getInputStream();
                 return BitmapFactory.decodeStream(is);
             } catch (MalformedURLException e) {
+                Log.e(TAG, "malformedurl: " + strUrl);
                 e.printStackTrace();
             } catch (IOException e) {
                 e.printStackTrace();
@@ -156,7 +179,6 @@ public class MusicListDetailActivity extends Activity {
             }
             return null;
         }
-
         private String joinString(String... params){
             StringBuilder sb = new StringBuilder();
             for(String param:params){
