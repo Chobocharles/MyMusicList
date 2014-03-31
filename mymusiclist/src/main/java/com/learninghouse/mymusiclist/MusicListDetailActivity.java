@@ -1,7 +1,6 @@
 package com.learninghouse.mymusiclist;
 
 import android.app.Activity;
-import android.app.Notification;
 import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.content.Context;
@@ -15,18 +14,18 @@ import android.support.v4.app.NotificationCompat;
 import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.google.gson.Gson;
-import com.learninghouse.mymusiclist.jsonObject.ImageResults;
-import com.learninghouse.mymusiclist.jsonObject.Result;
+import com.learninghouse.mymusiclist.search.ImageResults;
+import com.learninghouse.mymusiclist.search.Result;
+import com.learninghouse.mymusiclist.util.UrlFetchUtil;
 
-import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStream;
-import java.io.InputStreamReader;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
@@ -63,6 +62,18 @@ public class MusicListDetailActivity extends Activity {
         TextView songDate = (TextView) findViewById(R.id.textViewSongDateText);
         songDate.setText(df.format(song.getPublishedDate()));
 
+        TextView songEvents = (TextView) findViewById(R.id.textViewShowEvents);
+        songEvents.setOnClickListener(new View.OnClickListener() {
+
+            @Override
+            public void onClick(View view) {
+                Intent intent = new Intent(view.getContext(), MapEventsActivity.class);
+                intent.putExtra(SONG_TITLE,  song.getArtist());
+                startActivity(intent);
+            }
+        });
+
+
         new RandomImageAsyncTask(this).execute(song.getName(),song.getAlbum(),song.getArtist());
 
         mClickSound = MediaPlayer.create(this, R.raw.click);
@@ -74,7 +85,7 @@ public class MusicListDetailActivity extends Activity {
                 imageView.setImageResource(R.drawable.loading);
                 mClickSound.start();
                 new RandomImageAsyncTask(MusicListDetailActivity.this)
-                        .execute(song.getName(),song.getAlbum(),song.getArtist());
+                        .execute(song.getName(), song.getAlbum(), song.getArtist());
             }
         });
     }
@@ -121,7 +132,8 @@ public class MusicListDetailActivity extends Activity {
         }
         @Override
         protected Bitmap doInBackground(String... params) {
-            String json = getJSON(URL + joinString(params),1000);
+            //moved to a utility class so it can be called in many locations.
+            String json = UrlFetchUtil.getJSON(URL + joinString(params));
             Log.d("",json);
 
             //search google for images
@@ -137,7 +149,7 @@ public class MusicListDetailActivity extends Activity {
             }else{
                 mFailSound =  MediaPlayer.create(context, R.raw.wrong);
                 mFailSound.start();
-                buildSimpleNotification("Failed to load image",params[0]);
+                buildSimpleNotification("Failed to load image", params[0]);
                 return BitmapFactory.decodeResource(context.getResources(),
                         R.drawable.loading);
             }
@@ -151,40 +163,7 @@ public class MusicListDetailActivity extends Activity {
             }
         }
 
-        private String getJSON(String url, int timeout) {
-            HttpURLConnection c = null;
-            try {
-                java.net.URL u = new URL(url);
-                c = (HttpURLConnection) u.openConnection();
-                c.setRequestMethod("GET");
-                c.setRequestProperty("Content-length", "0");
-                c.setUseCaches(false);
-                c.setAllowUserInteraction(false);
-                c.setConnectTimeout(timeout);
-                c.setReadTimeout(timeout);
-                c.connect();
-                int status = c.getResponseCode();
 
-                switch (status) {
-                    case 200:
-                    case 201:
-                        BufferedReader br = new BufferedReader(
-                            new InputStreamReader(c.getInputStream()));
-                        StringBuilder sb = new StringBuilder();
-                        String line;
-                        while ((line = br.readLine()) != null) {
-                            sb.append(line+"\n");
-                        }
-                        br.close();
-                        return sb.toString();
-                }
-            } catch (MalformedURLException ex) {
-                Log.e("", ex.getMessage());
-            } catch (IOException ex) {
-                Log.e("", ex.getMessage());
-            }
-            return "";
-        }
         private String getRandomImageUrl(ImageResults imageResults, int count){
             if (imageResults==null){
                 return null;

@@ -88,6 +88,27 @@
             android:padding="5dp"
             />
     </LinearLayout>
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <TextView
+            android:id="@+id/textViewSongDate"
+            android:layout_height="wrap_content"
+            android:text=""
+            android:gravity="right"
+            android:textStyle="bold"
+            android:layout_width="30pt"
+            android:padding="5dp"
+            />
+        <TextView
+            android:id="@+id/textViewShowEvents"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:text="Show Events"
+            android:padding="5dp"
+            />
+    </LinearLayout>
 
     <ImageView
         android:layout_width="match_parent"

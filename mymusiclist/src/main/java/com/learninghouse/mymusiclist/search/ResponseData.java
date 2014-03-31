@@ -1,4 +1,4 @@
-package com.learninghouse.mymusiclist.jsonObject;
+package com.learninghouse.mymusiclist.search;
 
 import java.util.ArrayList;
 import java.util.List;

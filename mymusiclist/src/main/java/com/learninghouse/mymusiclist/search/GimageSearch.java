@@ -1,61 +1,46 @@
-package com.learninghouse.mymusiclist.jsonObject;
+package com.learninghouse.mymusiclist.search;
 
-import com.google.gson.annotations.Expose;
-
-public class Result {
-
-    @Expose
+/**
+ * Created by wesleyreisz on 1/26/14.
+ */
+public class GimageSearch {
     private String GsearchResultClass;
-    @Expose
-    private String width;
-    @Expose
-    private String height;
-    @Expose
+    private int width;
+    private int height;
     private String imageId;
-    @Expose
-    private String tbWidth;
-    @Expose
-    private String tbHeight;
-    @Expose
+    private int tbWidth;
+    private int tbHeight;
     private String unescapedUrl;
-    @Expose
     private String url;
-    @Expose
     private String visibleUrl;
-    @Expose
     private String title;
-    @Expose
     private String titleNoFormatting;
-    @Expose
     private String originalContextUrl;
-    @Expose
     private String content;
-    @Expose
     private String contentNoFormatting;
-    @Expose
     private String tbUrl;
 
     public String getGsearchResultClass() {
         return GsearchResultClass;
     }
 
-    public void setGsearchResultClass(String GsearchResultClass) {
-        this.GsearchResultClass = GsearchResultClass;
+    public void setGsearchResultClass(String gsearchResultClass) {
+        GsearchResultClass = gsearchResultClass;
     }
 
-    public String getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(String width) {
+    public void setWidth(int width) {
         this.width = width;
     }
 
-    public String getHeight() {
+    public int getHeight() {
         return height;
     }
 
-    public void setHeight(String height) {
+    public void setHeight(int height) {
         this.height = height;
     }
 
@@ -67,19 +52,19 @@ public class Result {
         this.imageId = imageId;
     }
 
-    public String getTbWidth() {
+    public int getTbWidth() {
         return tbWidth;
     }
 
-    public void setTbWidth(String tbWidth) {
+    public void setTbWidth(int tbWidth) {
         this.tbWidth = tbWidth;
     }
 
-    public String getTbHeight() {
+    public int getTbHeight() {
         return tbHeight;
     }
 
-    public void setTbHeight(String tbHeight) {
+    public void setTbHeight(int tbHeight) {
         this.tbHeight = tbHeight;
     }
 
@@ -154,5 +139,4 @@ public class Result {
     public void setTbUrl(String tbUrl) {
         this.tbUrl = tbUrl;
     }
-
 }

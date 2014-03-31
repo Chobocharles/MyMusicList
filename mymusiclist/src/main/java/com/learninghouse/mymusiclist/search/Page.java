@@ -1,4 +1,4 @@
-package com.learninghouse.mymusiclist.jsonObject;
+package com.learninghouse.mymusiclist.search;
 
 import com.google.gson.annotations.Expose;
 
